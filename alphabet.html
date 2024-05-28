@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ALPHABET</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            color: black;
+            background-color: blue;
+            height: 100vh;
+            width: 100vw;
+        }
+        .container {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #display {
+            font-family: "Impact", sans-serif;
+            font-size: 30vmin;
+            line-height: 0.8;
+            text-align: center;
+            text-shadow: white 1px 1px 1px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div id="display">
+            Press any key.
+        </div>
+    </div>
+    <script>
+        //========================================
+        // グローバル
+        //========================================
+        /* サンプル
+        // https://developer.mozilla.org/ja/docs/Web/API/KeyboardEvent
+        KeyboardEvent {
+            altKey: false, ctrlKey: false, metaKey: false, shiftKey: false,
+            key: "a", code: "KeyA",
+            keyCode(廃止): 65, which(廃止): 65, charCode(廃止): 0,
+            repeat: false,
+            type: "keyup",
+        ...}
+        // https://developer.mozilla.org/ja/docs/Web/API/MouseEvent
+        MouseEvent {
+            altKey: false, ctrlKey: false, metaKey: false, shiftKey: false,
+            clientX: 467, clientY: 142,
+            layerX(標準化なし): 467, layerY(標準化なし): 142,
+            pageX(実験): 467, pageY(実験): 142,
+            x(実験): 467, y(実験): 142,
+            which(標準化なし): 1,
+            type: "click",
+        ...}
+        */
+        // 記号(IDやファイル名への変換が必要)
+        const arySound = {
+            // "key": "id/filename",
+            " ": "space",
+            "!": "exclamation_mark",
+            "\"": "quotation_mark",
+            "#": "number_sign",
+            "$": "dollar_sign",
+            "%": "percent_sign",
+            "&": "ampersand",
+            // "'": "apostrophe",
+            "'": "Quote",
+            "(": "left_parenthesis",
+            ")": "right_parenthesis",
+            "*": "asterisk",
+            "+": "plus_sign",
+            ",": "comma",
+            // "-": "hyphen",
+            "-": "Minus",
+            // ".": "dot",
+            ".": "Period",
+            "/": "slash",
+            ":": "colon",
+            ";": "Semicolon",
+            "<": "less_than_sign",
+            // "=": "equals_sign",
+            "=": "Equal",
+            ">": "greater_than_sign",
+            "?": "question_mark",
+            "@": "at",
+            // "[": "left_square_bracket",
+            "[": "BracketLeft",
+            "\\": "backslash",
+            // "]": "right_square_bracket",
+            "]": "BracketRight",
+            "^": "circumflex",
+            "_": "underscore",
+            "`": "grave_accent",
+            "{": "left_curly_bracket",
+            "|": "vertical_line",
+            "}": "right_curly_bracket",
+            "~": "tilde",
+            "¥": "Yen",
+        };
+        // keyをそのままIDやファイル名に使用
+        const arySpecial = [
+            // key/id/filename
+            "Backspace",
+            "Tab",
+            "Enter",
+            "Shift", "Control", "Alt", "Meta",
+            "PauseBreak",
+            "CapsLock",
+            "Escape",
+            "PageUp", "PageDown",
+            "Home", "End",
+            "Insert", "Delete",
+            "NumLock", "ScrollLock",
+            "ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown",
+            "F1", "F2", "F3", "F4", "F5", "F6",
+            "F7", "F8", "F9", "F10", "F11", "F12",
+            "Dead",
+            "PrintScreen", "Pause", "Break",
+            "Zenkaku", "Hankaku", "Alphanumeric",
+            "NonConvert", "Convert", "Hiragana", "ContextMenu",
+            "KanjiMode", "KanaMode", "Romaji", "Clear",
+        ];
+        const aryMouse = [
+            // type
+            "click", "dblclick", "auxclick",
+            "touchstart", "touchend", "touchmove", "touchcancel",
+        ];
+        // 視覚効果
+        const aryEffects = [
+            "bounce",
+            "flash",
+            "pulse",
+            "rubberBand",
+            "shakeX",
+            "shakeY",
+            "headShake",
+            "swing",
+            "tada",
+            "wobble",
+            "jello",
+            "heartBeat",
+            "backInDown",
+            "backInLeft",
+            "backInRight",
+            "backInUp",
+            "backOutDown",
+            "backOutLeft",
+            "backOutRight",
+            "backOutUp",
+            "bounceIn",
+            "bounceInDown",
+            "bounceInLeft",
+            "bounceInRight",
+            "bounceInUp",
+            "bounceOut",
+            "bounceOutDown",
+            "bounceOutLeft",
+            "bounceOutRight",
+            "bounceOutUp",
+            "fadeIn",
+            "fadeInDown",
+            "fadeInDownBig",
+            "fadeInLeft",
+            "fadeInLeftBig",
+            "fadeInRight",
+            "fadeInRightBig",
+            "fadeInUp",
+            "fadeInUpBig",
+            "fadeInTopLeft",
+            "fadeInTopRight",
+            "fadeInBottomLeft",
+            "fadeInBottomRight",
+            "fadeOut",
+            "fadeOutDown",
+            "fadeOutDownBig",
+            "fadeOutLeft",
+            "fadeOutLeftBig",
+            "fadeOutRight",
+            "fadeOutRightBig",
+            "fadeOutUp",
+            "fadeOutUpBig",
+            "fadeOutTopLeft",
+            "fadeOutTopRight",
+            "fadeOutBottomRight",
+            "fadeOutBottomLeft",
+            "flip",
+            "flipInX",
+            "flipInY",
+            "flipOutX",
+            "flipOutY",
+            "lightSpeedInRight",
+            "lightSpeedInLeft",
+            "lightSpeedOutRight",
+            "lightSpeedOutLeft",
+            "rotateIn",
+            "rotateInDownLeft",
+            "rotateInDownRight",
+            "rotateInUpLeft",
+            "rotateInUpRight",
+            "rotateOut",
+            "rotateOutDownLeft",
+            "rotateOutDownRight",
+            "rotateOutUpLeft",
+            "rotateOutUpRight",
+            "hinge",
+            "jackInTheBox",
+            "rollIn",
+            "rollOut",
+            "zoomIn",
+            "zoomInDown",
+            "zoomInLeft",
+            "zoomInRight",
+            "zoomInUp",
+            "zoomOut",
+            "zoomOutDown",
+            "zoomOutLeft",
+            "zoomOutRight",
+            "zoomOutUp",
+            "slideInDown",
+            "slideInLeft",
+            "slideInRight",
+            "slideInUp",
+            "slideOutDown",
+            "slideOutLeft",
+            "slideOutRight",
+            "slideOutUp",
+        ];
+
+        //========================================
+        // アニメーション
+        // https://animate.style/
+        //========================================
+        const animateCSS = (element, animation, prefix = 'animate__') =>
+            // We create a Promise and return it
+            new Promise((resolve, reject) => {
+                const animationName = `${prefix}${animation}`;
+                const node = document.querySelector(element);
+
+                node.classList.add(`${prefix}animated`, animationName);
+
+                // When the animation ends, we clean the classes and resolve the Promise
+                function handleAnimationEnd(event) {
+                    event.stopPropagation();
+                    node.classList.remove(`${prefix}animated`, animationName);
+                    resolve('Animation ended');
+                }
+
+                node.addEventListener('animationend', handleAnimationEnd, { once: true });
+            });
+        //========================================
+        // ランダム
+        //========================================
+        function randomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+        function randomRgba() {
+            return "rgba("
+                + randomInt(256) + ","
+                + randomInt(256) + ","
+                + randomInt(256) + ","
+                + Math.random() + ")";
+        }
+        //========================================
+        // 音関連
+        //========================================
+        function createAudio(word) {
+            if (!word) {
+                console.log("createAudio NULL: " + word);
+                return null;
+            }
+            let el = document.createElement('audio');
+            el.id = word;
+            el.src = "sound/" + word + ".ogg";
+            el.preload = 'auto';
+            return el;
+        }
+        function play(id) {
+            let el = document.getElementById(id);
+            if (!el) {
+                console.log("play NO ID: " + id);
+                return;
+            }
+            if (!el.paused) {
+                el.pause();
+                el.currentTime = 0;
+            }
+            el.play();
+        }
+        function playSound(evt) {
+            if (evt === null) {
+                console.log("playSound NULL: " + evt);
+                return;
+            }
+            // mouse
+            if (aryMouse.includes(evt.type)) {
+                console.log("mouse: " + evt.type);
+                play(evt.type);
+                return;
+            }
+            // key
+            if (document.getElementById(evt.key)) {
+                play(evt.key);
+                return;
+            }
+            let soundID = arySound[evt.key];
+            if (soundID) {
+                console.log(evt.key + ": " + soundID);
+                play(soundID);
+                return;
+            }
+            // keyで存在しないものに対してkeyCodeで対応
+            let ch = String.fromCharCode(evt.keyCode).toLowerCase();
+            if (/^[a-zA-Z0-9]$/.test(ch)) {
+                console.log("fromCharCode: "+ ch);
+                play(ch);
+                return;
+            }
+            // codeでarySoundに存在するものがあればそれで対応
+            let aryValues = Object.values(arySound);
+            for (let value of aryValues) {
+                if (value == evt.code || value == evt.code.toLowerCase()) {
+                    console.log("code: "+ evt.code);
+                    play(value);
+                    return;
+                }
+            }
+            console.log("playSound NOT USE: " + evt.key);
+        }
+        //========================================
+        // キーコードの見える化
+        //========================================
+        function visualize(evt) {
+            let strOutput = evt.key + "\n" + evt.keyCode + " (";
+            if (evt.altKey)     strOutput += "A-";
+            if (evt.ctrlKey)    strOutput += "C-";
+            if (evt.metaKey)    strOutput += "M-";
+            if (evt.shiftKey)   strOutput += "S-";
+            strOutput += evt.code + ")";
+            return strOutput;
+        }
+        //========================================
+        // イベント
+        //========================================
+        // キーボードを押した時
+        function keydownFunc(evt) {
+            // リピート時
+            if (evt.repeat) {
+                return;
+            }
+            // 文字列の出力
+            document.getElementById("display").innerText = visualize(evt);
+            console.log(evt);
+            // 色変化
+            document.getElementsByTagName("body")[0].style.backgroundColor = randomRgba();
+            // アニメーション
+            animateCSS('#display', aryEffects[randomInt(aryEffects.length)]);
+            // 音再生
+            playSound(evt);
+            // イベントのキャンセル
+            if (evt.cancelable) {
+                evt.preventDefault();
+            }
+            evt.stopPropagation();
+        };
+        // キーボードを離した時
+        function keyupFunc(evt) {
+            console.log(evt);
+            // イベントのキャンセル
+            if (evt.cancelable) {
+                evt.preventDefault();
+            }
+            evt.stopPropagation();
+        }
+        // フォーカスを失った時
+        function blurFunc(evt) {
+            // 文字列の出力
+//            document.getElementById("display").innerText = "blur";
+            console.log(evt);
+        }
+        // マウスイベント時
+        function mouseFunc(evt) {
+            // 文字列の出力
+            document.getElementById("display").innerText = evt.type;
+            console.log(evt);
+            // 色変化
+            document.getElementsByTagName("body")[0].style.backgroundColor = randomRgba();
+            // アニメーション
+            animateCSS('#display', aryEffects[randomInt(aryEffects.length)]);
+            // 音再生
+            playSound(evt);
+        }
+
+        //========================================
+        // メイン
+        //========================================
+        function main() {
+            // イベント登録
+            window.addEventListener('keydown', keydownFunc, true);
+            window.addEventListener('keyup', keyupFunc, true);
+            window.addEventListener('blur', blurFunc, true);
+            window.addEventListener('click', mouseFunc, false);
+            window.addEventListener('dblclick', mouseFunc, false);
+            window.addEventListener('auxclick', mouseFunc, false);
+            window.addEventListener('touchstart', mouseFunc, false);
+            window.addEventListener('touchend', mouseFunc, false);
+            window.addEventListener('touchmove', mouseFunc, false);
+            window.addEventListener('touchcancel', mouseFunc, false);
+            // 音
+            let elBody = document.getElementsByTagName('body')[0];
+            // arySound
+            Object.keys(arySound).forEach(function(key) {
+                let el = createAudio(arySound[key]);
+                if (el) {
+                    console.log("arySound[" + key + "]:" + arySound[key]);
+                    elBody.appendChild(el);
+                }
+            });
+            // arySpecial, aryMouse
+            arySpecial.concat(aryMouse).forEach(function(key) {
+                let el = createAudio(key);
+                if (el) {
+                    console.log("arySpecial/Mouse:" + key);
+                    elBody.appendChild(el);
+                }
+            });
+            // alphabet
+            let intA = "a".charCodeAt();
+            for (let i = 0; i < 26; i++) {
+                let ch = String.fromCharCode(intA + i);
+                let el = createAudio(ch);
+                if (el) {
+                    console.log("alphabet:" + ch);
+                    elBody.appendChild(el);
+                }
+            }
+            // number
+            let int0 = "0".charCodeAt();
+            for (let i = 0; i <= 9; i++) {
+                let ch = String.fromCharCode(int0 + i);
+                let el = createAudio(ch);
+                if (el) {
+                    console.log("number:" + ch);
+                    elBody.appendChild(el);
+                }
+            }
+        }
+        //========================================
+        // ページがロードされたときに実行
+        //========================================
+        window.addEventListener('load', main, false);
+    </script>
+</body>
+
+</html>
